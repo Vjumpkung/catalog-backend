@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:10.3
+    container_name: YOUR_NAME_HERE
+    restart: always
+    environment:
+      - POSTGRES_USER=USERNAME
+      - POSTGRES_PASSWORD=PASSWORD
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+volumes:
+  postgres:
