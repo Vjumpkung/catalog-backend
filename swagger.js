@@ -58,11 +58,11 @@ const doc = {
 };
 
 const outputFile = "./public/swagger.json";
-const routes = ["./app.js"];
+const routes = ["./index.js"];
 
 /* NOTE: If you are using the express Router, you must pass in the 'routes' only the 
 root file where the route starts, such as index.js, app.js, routes.js, etc ... */
 
 swaggerAutogen({ openapi: "3.0.0" })(outputFile, routes, doc).then(async () => {
-  await import("./app.js");
+  await import("./index.js");
 });
