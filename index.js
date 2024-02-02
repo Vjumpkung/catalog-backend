@@ -13,7 +13,7 @@ import usersRouter from "./routes/users.js";
 import authRouter from "./routes/auth.js";
 import choicesRouter from "./routes/choices.js";
 import settingsRouter from "./routes/settings.js";
-import swaggerDocument from "./public/swagger.json" assert { type: "json" };
+import swaggerDocument from "./public/docs.json" assert { type: "json" };
 
 dotenv.config();
 const __dirname = dirname(fileURLToPath(import.meta.url));
