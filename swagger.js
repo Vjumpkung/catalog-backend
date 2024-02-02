@@ -26,7 +26,11 @@ const doc = {
     title: process.env.NAME,
     description: `This is the API documentation for the ${process.env.NAME} project.`,
   },
-  host: process.env.HOST,
+  servers: [
+    {
+      url: process.env.HOST,
+    },
+  ],
   components: {
     schemas: {
       IndexGetResponseDto,
