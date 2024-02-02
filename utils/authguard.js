@@ -3,7 +3,7 @@ import { config } from "../config.js";
 import prisma from "../database.js";
 import * as argon2 from "argon2";
 
-export function requireLogin(req, res, next) {
+export async function requireLogin(req, res, next) {
   if (req.get("Authorization")) {
     const token = req.get("Authorization").split(" ")[1];
     try {

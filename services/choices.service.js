@@ -1,6 +1,6 @@
 import prisma from "../database.js";
 
-export function create_choice(req, res, next) {
+export async function create_choice(req, res, next) {
   /*
   #swagger.tags = ['Choices']
   #swagger.description = 'Endpoint to create a choice.'
@@ -36,7 +36,7 @@ export function create_choice(req, res, next) {
     });
 }
 
-export function get_choices(req, res, next) {
+export async function get_choices(req, res, next) {
   /* 
   #swagger.tags = ['Choices']
   #swagger.description = 'Endpoint to get all choices.'
@@ -65,7 +65,7 @@ export function get_choices(req, res, next) {
     });
 }
 
-export function get_choice_by_id(req, res, next) {
+export async function get_choice_by_id(req, res, next) {
   /* 
   #swagger.tags = ['Choices']
   #swagger.description = 'Endpoint to get choices by id.'
@@ -94,7 +94,7 @@ export function get_choice_by_id(req, res, next) {
     });
 }
 
-export function update_choice(req, res, next) {
+export async function update_choice(req, res, next) {
   /* 
   #swagger.tags = ['Choices']
   #swagger.description = 'Update Choice by id.'
@@ -125,7 +125,7 @@ export function update_choice(req, res, next) {
     });
 }
 
-export function delete_choice(req, res, next) {
+export async function delete_choice(req, res, next) {
   /* 
   #swagger.tags = ['Choices']
   #swagger.description = 'Delete Choice by id.'

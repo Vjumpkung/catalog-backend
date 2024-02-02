@@ -1,6 +1,6 @@
 import prisma from "../database.js";
 
-export function get_settings(req, res, next) {
+export async function get_settings(req, res, next) {
   /*
   #swagger.tags = ['Settings']
   #swagger.description = 'Endpoint to get settings.'
@@ -35,7 +35,7 @@ export function get_settings(req, res, next) {
     });
 }
 
-export function update_settings(req, res, next) {
+export async function update_settings(req, res, next) {
   /*
   #swagger.tags = ['Settings']
   #swagger.description = 'Endpoint to update settings.'

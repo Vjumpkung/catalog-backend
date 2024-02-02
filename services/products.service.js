@@ -1,6 +1,6 @@
 import prisma from "../database.js";
 
-export function get_products(req, res, next) {
+export async function get_products(req, res, next) {
   /*
   #swagger.tags = ['Products']
   #swagger.description = 'Endpoint to get all products.'
@@ -78,7 +78,7 @@ export function get_products(req, res, next) {
   }
 }
 
-export function create_product(req, res, next) {
+export async function create_product(req, res, next) {
   /*
   #swagger.tags = ['Products']
   #swagger.description = 'Endpoint to create a product.'
@@ -147,7 +147,7 @@ export function create_product(req, res, next) {
     });
 }
 
-export function get_products_by_id(req, res, next) {
+export async function get_products_by_id(req, res, next) {
   /*
   #swagger.tags = ['Products']
   #swagger.description = 'Endpoint to get a product by id.'
@@ -187,7 +187,7 @@ export function get_products_by_id(req, res, next) {
     });
 }
 
-export function update_product(req, res, next) {
+export async function update_product(req, res, next) {
   /*
     #swagger.tags = ['Products']
     #swagger.description = 'Endpoint to update a product.'
@@ -242,7 +242,7 @@ export function update_product(req, res, next) {
     });
 }
 
-export function change_status_product(req, res, next) {
+export async function change_status_product(req, res, next) {
   /*
     #swagger.tags = ['Products']
     #swagger.description = 'Endpoint to change the status of a product.'
@@ -286,7 +286,7 @@ export function change_status_product(req, res, next) {
     });
 }
 
-export function delete_product(req, res, next) {
+export async function delete_product(req, res, next) {
   /*
     #swagger.tags = ['Products']
     #swagger.description = 'Endpoint to delete a product.'
