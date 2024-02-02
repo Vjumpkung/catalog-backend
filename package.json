@@ -1,6 +1,6 @@
 {
-  "name": "backend-herocartoon",
-  "version": "0.0.0",
+  "name": "catalog-backend",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "scripts": {
