@@ -17,8 +17,11 @@ export async function get_settings(req, res, next) {
   */
 
   prisma.setting
-    .findFirstOrThrow()
+    .findFirst()
     .then((settings) => {
+      if (settings === null) {
+        throw new Error("No settings found");
+      }
       return res.status(200).json(settings);
     })
     .catch((err) => {
@@ -48,22 +51,30 @@ export async function update_settings(req, res, next) {
   #swagger.responses[204] = {
     description: 'Settings updated successfully.'
   }
+  #swagger.security = [{
+            "bearerAuth": []
+  }]
   */
 
-  prisma.setting.findFirst().then((settings) => {
-    const id = settings.id;
-    prisma.setting
-      .update({
-        where: {
-          id: id,
-        },
-        data: {
-          name: req.body.name,
-          logo: req.body.logo,
-        },
-      })
-      .then((settings) => {
-        return res.status(204).send();
-      });
-  });
+  prisma.setting
+    .findFirst()
+    .then((settings) => {
+      const id = settings.id;
+      prisma.setting
+        .update({
+          where: {
+            id: id,
+          },
+          data: {
+            name: req.body.name,
+            logo: req.body.logo,
+          },
+        })
+        .then((settings) => {
+          return res.status(204).send();
+        });
+    })
+    .catch((err) => {
+      res.status(500).send({ message: err });
+    });
 }
