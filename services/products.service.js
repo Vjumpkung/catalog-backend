@@ -30,15 +30,12 @@ export async function get_products(req, res, next) {
         where: {
           deleted_at: null,
         },
-        select: {
-          id: true,
-          name: true,
-          price: true,
-          choices: true,
-          description: false,
-          published_at: true,
-          deleted_at: false,
-          images: true,
+        include: {
+          choices: {
+            where: {
+              deleted_at: null,
+            },
+          },
         },
         orderBy: [
           {
@@ -56,15 +53,12 @@ export async function get_products(req, res, next) {
           deleted_at: null,
           published_at: { not: null },
         },
-        select: {
-          id: true,
-          name: true,
-          price: true,
-          images: true,
-          choices: true,
-          description: false,
-          published_at: true,
-          deleted_at: false,
+        include: {
+          choices: {
+            where: {
+              deleted_at: null,
+            },
+          },
         },
         orderBy: [
           {
@@ -170,16 +164,16 @@ export async function get_products_by_id(req, res, next) {
   const id = req.params.id;
   prisma.product
     .findUnique({
-      where: { id: id, deleted_at: null },
-      select: {
-        id: true,
-        name: true,
-        price: true,
-        description: true,
-        choices: true,
-        images: true,
-        published_at: true,
-        deleted_at: false,
+      where: {
+        id: id,
+        deleted_at: null,
+      },
+      include: {
+        choices: {
+          where: {
+            deleted_at: null,
+          },
+        },
       },
     })
     .then((product) => {
