@@ -30,8 +30,9 @@ export async function get_settings(req, res, next) {
           .then((settings) => {
             return res.status(200).json(settings);
           });
+      } else {
+        return res.status(200).json(settings);
       }
-      return res.status(200).json(settings);
     })
     .catch((err) => {
       return res.status(500).send({ message: err });
