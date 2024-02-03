@@ -20,21 +20,21 @@ export async function get_settings(req, res, next) {
     .findFirst()
     .then((settings) => {
       if (settings === null) {
-        throw new Error("No settings found");
+        prisma.setting
+          .create({
+            data: {
+              name: "Catalog",
+              logo: "https://via.placeholder.com/150",
+            },
+          })
+          .then((settings) => {
+            return res.status(200).json(settings);
+          });
       }
       return res.status(200).json(settings);
     })
     .catch((err) => {
-      prisma.setting
-        .create({
-          data: {
-            name: "Catalog",
-            logo: "https://via.placeholder.com/150",
-          },
-        })
-        .then((settings) => {
-          return res.status(200).json(settings);
-        });
+      return res.status(500).send({ message: err });
     });
 }
 
