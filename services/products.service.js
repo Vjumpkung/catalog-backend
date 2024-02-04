@@ -218,8 +218,6 @@ export async function update_product(req, res, next) {
     images: body.images,
   };
 
-  console.log(productUpdateDto);
-
   prisma.product
     .update({
       where: { id: id, deleted_at: null },
