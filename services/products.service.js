@@ -26,39 +26,50 @@ export async function get_products(req, res, next) {
 
   const query = req.query.status;
 
-  prisma.product
+  await prisma.product
     .findMany({
       where: {
         deleted_at: null,
       },
-      include: {
-        choices: {
-          where: {
-            deleted_at: null,
-          },
-          select: {
-            id: true,
-            name: true,
-            price: true,
-          },
-        },
-      },
       orderBy: [
         {
-          published_at: { sort: "asc", nulls: "last" },
+          published_at: { sort: "desc", nulls: "last" },
         },
       ],
     })
     .then((products) => {
-      res.status(200).json(
-        products
-          .map((p) => {
-            delete p.description;
-            return p;
+      const x = products.map((product) => {
+        const y = product.choices.map((choice) => {
+          return prisma.choices
+            .findUnique({
+              where: {
+                id: choice,
+                deleted_at: null,
+              },
+              select: {
+                id: true,
+                name: true,
+                price: true,
+              },
+            })
+            .then((choice) => {
+              return choice;
+            });
+        });
+        return Promise.all(y).then((choices) => {
+          product.choices = choices.filter((choice) => choice !== null);
+          return product;
+        });
+      });
+      Promise.all(x).then((products) =>
+        res.status(200).json(
+          products.filter((product) => {
+            if (query === "published") {
+              return product.published_at !== null;
+            }
+            return true;
           })
-          .filter((product) => {
-            return query === "published" ? product.published_at !== null : true;
-          })
+        )
       );
     });
 }
@@ -95,7 +106,7 @@ export async function create_product(req, res, next) {
     name: body.name,
     price: body.price,
     description: body.description,
-    choices: body.choices.map((choice) => ({ id: choice })),
+    choices: body.choices,
     images: body.images,
     published_at: body.published_at ? new Date(body.published_at) : undefined,
   };
@@ -108,9 +119,7 @@ export async function create_product(req, res, next) {
         description: productCreateDto.description,
         images: productCreateDto.images,
         published_at: productCreateDto.published_at,
-        choices: {
-          connect: productCreateDto.choices,
-        },
+        choices: productCreateDto.choices,
       },
     })
     .then((product) => {
@@ -149,21 +158,29 @@ export async function get_products_by_id(req, res, next) {
         id: id,
         deleted_at: null,
       },
-      include: {
-        choices: {
-          where: {
-            deleted_at: null,
-          },
-          select: {
-            id: true,
-            name: true,
-            price: true,
-          },
-        },
-      },
     })
     .then((product) => {
-      res.status(200).json(product);
+      const x = product.choices.map((choice) => {
+        return prisma.choices
+          .findUnique({
+            where: {
+              id: choice,
+              deleted_at: null,
+            },
+            select: {
+              id: true,
+              name: true,
+              price: true,
+            },
+          })
+          .then((choice) => {
+            return choice;
+          });
+      });
+      Promise.all(x).then((choices) => {
+        product.choices = choices.filter((choice) => choice !== null);
+        return res.status(200).json(product);
+      });
     });
 }
 
@@ -197,9 +214,12 @@ export async function update_product(req, res, next) {
     name: body.name,
     price: body.price,
     description: body.description,
-    choices: body.choices?.map((choice) => ({ id: choice })),
+    choices: body.choices,
     images: body.images,
   };
+
+  console.log(productUpdateDto);
+
   prisma.product
     .update({
       where: { id: id, deleted_at: null },
@@ -208,9 +228,7 @@ export async function update_product(req, res, next) {
         price: productUpdateDto.price,
         description: productUpdateDto.description,
         images: productUpdateDto.images,
-        choices: {
-          set: productUpdateDto.choices,
-        },
+        choices: productUpdateDto.choices,
       },
     })
     .then((product) => {
