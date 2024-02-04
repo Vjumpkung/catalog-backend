@@ -24,52 +24,43 @@ export async function get_products(req, res, next) {
   }
   */
 
-  if (req.query.status === "all") {
-    prisma.product
-      .findMany({
-        where: {
-          deleted_at: null,
-        },
-        include: {
-          choices: {
-            where: {
-              deleted_at: null,
-            },
+  const query = req.query.status;
+
+  prisma.product
+    .findMany({
+      where: {
+        deleted_at: null,
+      },
+      include: {
+        choices: {
+          where: {
+            deleted_at: null,
+          },
+          select: {
+            id: true,
+            name: true,
+            price: true,
           },
         },
-        orderBy: [
-          {
-            published_at: "desc",
-          },
-        ],
-      })
-      .then((products) => {
-        res.status(200).json(products);
-      });
-  } else if (req.query.status === "published") {
-    prisma.product
-      .findMany({
-        where: {
-          deleted_at: null,
-          published_at: { not: null },
+      },
+      orderBy: [
+        {
+          published_at: { sort: "asc", nulls: "last" },
         },
-        include: {
-          choices: {
-            where: {
-              deleted_at: null,
-            },
-          },
-        },
-        orderBy: [
-          {
-            published_at: "desc",
-          },
-        ],
-      })
-      .then((products) => {
-        res.status(200).json(products);
-      });
-  }
+      ],
+    })
+    .then((products) => {
+      res.status(200).json(
+        products
+          .map((p) => {
+            delete p.description;
+            return p;
+          })
+          .filter((product) => {
+            return query === "published" ? product.published_at !== null : true;
+          })
+      );
+    });
 }
 
 export async function create_product(req, res, next) {
@@ -121,16 +112,6 @@ export async function create_product(req, res, next) {
           connect: productCreateDto.choices,
         },
       },
-      select: {
-        id: true,
-        name: true,
-        price: true,
-        description: true,
-        choices: true,
-        images: true,
-        published_at: true,
-        deleted_at: false,
-      },
     })
     .then((product) => {
       return res.status(201).json(product);
@@ -172,6 +153,11 @@ export async function get_products_by_id(req, res, next) {
         choices: {
           where: {
             deleted_at: null,
+          },
+          select: {
+            id: true,
+            name: true,
+            price: true,
           },
         },
       },

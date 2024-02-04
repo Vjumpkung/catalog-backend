@@ -67,4 +67,6 @@ const routes = ["./index.js"];
 /* NOTE: If you are using the express Router, you must pass in the 'routes' only the 
 root file where the route starts, such as index.js, app.js, routes.js, etc ... */
 
-swaggerAutogen({ openapi: "3.0.0" })(outputFile, routes, doc);
+swaggerAutogen({ openapi: "3.0.0" })(outputFile, routes, doc).then(async () => {
+  await import("./index.js"); // Your project's root file
+});

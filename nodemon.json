@@ -1,6 +1,6 @@
 {
   "verbose": true,
   "ignore": [
-    "swagger.json"
+    "./public/docs.json"
   ]
 }

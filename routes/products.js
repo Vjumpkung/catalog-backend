@@ -10,11 +10,11 @@ import {
 } from "../services/products.service.js";
 const router = express.Router();
 
-router.get("/", get_products);
-router.get("/:id", get_products_by_id);
-router.post("/", create_product);
-router.patch("/:id/update", update_product);
-router.patch("/:id", change_status_product);
-router.delete("/:id", delete_product);
+router.get("/", await get_products);
+router.get("/:id", await get_products_by_id);
+router.post("/", await create_product);
+router.patch("/:id/update", await update_product);
+router.patch("/:id", await change_status_product);
+router.delete("/:id", await delete_product);
 
 export default router;

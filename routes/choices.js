@@ -9,10 +9,10 @@ import {
 } from "../services/choices.service.js";
 const router = express.Router();
 
-router.get("/", requireLogin, get_choices);
-router.get("/:id", requireLogin, get_choice_by_id);
-router.post("/", requireLogin, create_choice);
-router.patch("/:id", requireLogin, update_choice);
-router.delete("/:id", requireLogin, delete_choice);
+router.get("/", await requireLogin, await get_choices);
+router.get("/:id", await requireLogin, await get_choice_by_id);
+router.post("/", await requireLogin, await create_choice);
+router.patch("/:id", await requireLogin, await update_choice);
+router.delete("/:id", await requireLogin, await delete_choice);
 
 export default router;

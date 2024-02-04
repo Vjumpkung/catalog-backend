@@ -4,8 +4,8 @@ import { has_admin, requireLogin } from "../utils/authguard.js";
 
 const router = express.Router();
 
-router.post("/login", login);
-router.post("/register", has_admin, register);
-router.get("/me", requireLogin, me);
+router.post("/login", await login);
+router.post("/register", await has_admin, await register);
+router.get("/me", await requireLogin, await me);
 
 export default router;

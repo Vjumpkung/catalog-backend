@@ -14,11 +14,13 @@ import authRouter from "./routes/auth.js";
 import choicesRouter from "./routes/choices.js";
 import settingsRouter from "./routes/settings.js";
 import swaggerDocument from "./public/docs.json" assert { type: "json" };
+import prisma from "./database.js";
+import compression from "compression";
 
 dotenv.config();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-function App() {
+async function App() {
   const app = express();
   app.use(logger("dev"));
   app.use(json());
@@ -26,6 +28,7 @@ function App() {
   app.use(cookieParser());
   app.use(express.static(join(__dirname, "public")));
   app.use(cors());
+  app.use(compression());
 
   app.use("/", indexRouter);
   app.use("/products", productsRouter);
@@ -40,4 +43,12 @@ function App() {
   return app;
 }
 
-App();
+App()
+  .then(async (app) => {
+    await prisma.$connect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });

@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-router.get("/ping", function (req, res, next) {
+router.get("/ping", async function (req, res, next) {
   /*
   #swagger.tags = ['/']
   #swagger.description = 'Ping and Pong'
