@@ -39,6 +39,8 @@ export async function get_products(req, res, next) {
     })
     .then((products) => {
       const x = products.map((product) => {
+        delete product.deleted_at;
+        delete product.description;
         const y = product.choices.map((choice) => {
           return prisma.choices
             .findUnique({
