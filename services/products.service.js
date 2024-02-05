@@ -38,6 +38,9 @@ export async function get_products(req, res, next) {
       ],
     })
     .then((products) => {
+      if (products === null) {
+        return res.status(200).json([]);
+      }
       const x = products.map((product) => {
         delete product.deleted_at;
         delete product.description;
@@ -73,6 +76,9 @@ export async function get_products(req, res, next) {
           })
         )
       );
+    })
+    .catch((err) => {
+      return res.status(500).json({ error: "An error has been occured." });
     });
 }
 
@@ -155,7 +161,7 @@ export async function get_products_by_id(req, res, next) {
   */
   const id = req.params.id;
   prisma.product
-    .findUnique({
+    .findUniqueOrThrow({
       where: {
         id: id,
         deleted_at: null,
@@ -183,6 +189,9 @@ export async function get_products_by_id(req, res, next) {
         product.choices = choices.filter((choice) => choice !== null);
         return res.status(200).json(product);
       });
+    })
+    .catch((err) => {
+      return res.status(404).json({ error: "Product not found." });
     });
 }
 
